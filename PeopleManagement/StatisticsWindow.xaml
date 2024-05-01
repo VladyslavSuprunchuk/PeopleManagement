@@ -1,0 +1,29 @@
+﻿<Window x:Class="PeopleManagement.StatisticsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PeopleManagement"
+        mc:Ignorable="d"
+        Title="StatisticsWindow" Height="450" Width="800">
+    <Grid>
+        <StackPanel Margin="10">
+            <TextBlock Text="Статистика" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+            
+            <TextBlock Text="Загальна кількість співробітників:" Margin="0,0,0,5"/>
+            <TextBlock x:Name="totalEmployeesTextBlock" Margin="0,0,0,5"/>
+
+            <TextBlock Text="Середня заробітна плата:" Margin="0,0,0,5"/>
+            <TextBlock x:Name="averageSalaryTextBlock" Margin="0,0,0,5"/>
+
+            <DataGrid x:Name="positionStatisticsDataGrid" AutoGenerateColumns="False" Margin="0,10,0,0">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Назва Позиції" Binding="{Binding PositionName}"/>
+                    <DataGridTextColumn Header="Кількість співробітників" Binding="{Binding NumberOfEmployees}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Button Content="Закрити" Click="CloseButton_Click" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+        </StackPanel>
+    </Grid>
+</Window>
