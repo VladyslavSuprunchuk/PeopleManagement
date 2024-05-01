@@ -17,7 +17,7 @@ namespace PeopleManagement.Services.Services
 
         public static void ExportToJson(List<Employee> employees, string filePath)
         {
-            string jsonData = JsonConvert.SerializeObject(employees, Formatting.Indented);
+            var jsonData = JsonConvert.SerializeObject(employees, Formatting.Indented);
 
             File.WriteAllText(filePath, jsonData);
         }
