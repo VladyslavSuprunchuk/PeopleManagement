@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PeopleManagement.DatabaseProvider;
 using PeopleManagement.DatabaseProvider.Models;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace PeopleManagement
@@ -46,7 +47,7 @@ namespace PeopleManagement
         }
 
         // Create employee event
-        private void CreateButton_Click(object sender, RoutedEventArgs e)
+        private async void CreateButton_Click(object sender, RoutedEventArgs e)
         {
             var isEmployeeValid = CheckIsEmployeeValid();
 
@@ -59,7 +60,7 @@ namespace PeopleManagement
                 return;
             }
 
-            CreateEmployee();
+            await CreateEmployeeAsync();
 
             DialogResult = true;
             Close();
@@ -83,7 +84,7 @@ namespace PeopleManagement
         }
 
         // New employee creation
-        private void CreateEmployee()
+        private async Task CreateEmployeeAsync()
         {
             var newEmployee = new Employee
             {
@@ -99,7 +100,7 @@ namespace PeopleManagement
                     Title = newPositionTextBox.Text
                 };
 
-                db.Positions.Add(position);
+                await db.Positions.AddAsync(position);
                 newEmployee.Position = position;
             }
             else
@@ -107,8 +108,8 @@ namespace PeopleManagement
                 newEmployee.Position = positionComboBox.SelectedItem as Position;
             }
 
-            db.Employees.Add(newEmployee);
-            db.SaveChanges();
+            await db.Employees.AddAsync(newEmployee);
+            await db.SaveChangesAsync();
         }
     }
 }

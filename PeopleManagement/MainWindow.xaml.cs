@@ -5,6 +5,7 @@ using PeopleManagement.DatabaseProvider.Models;
 using PeopleManagement.Services.Services;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace PeopleManagement
@@ -46,13 +47,12 @@ namespace PeopleManagement
         }
 
         // Fire employee
-        private void FireEmployeeButton_Click(object sender, RoutedEventArgs e)
+        private async void FireEmployeeButton_Click(object sender, RoutedEventArgs e)
         {
             if (employeeListView.SelectedItem != null)
             {
                 var selectedEmployee = (Employee)employeeListView.SelectedItem;
-                selectedEmployee.IsFired = true;
-                db.SaveChanges();
+                await FireEmployeeAsync(selectedEmployee);
 
                 if (!string.IsNullOrEmpty(currentSearchText))
                 {
@@ -67,6 +67,13 @@ namespace PeopleManagement
             {
                 MessageBox.Show("Будь ласка, виберіть співробітника для звільнення.");
             }
+        }
+
+        // Fire employee in db
+        private async Task FireEmployeeAsync(Employee employee)
+        {
+            employee.IsFired = true;
+            await db.SaveChangesAsync();
         }
 
         // To update list with fresh data
@@ -113,7 +120,7 @@ namespace PeopleManagement
         }
 
         //Import json file
-        private void ImportFromJsonButton_Click(object sender, RoutedEventArgs e)
+        private async void ImportFromJsonButton_Click(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = JsonFilter;
@@ -122,7 +129,7 @@ namespace PeopleManagement
             if (openFileDialog.ShowDialog() == true)
             {
                 var filePath = openFileDialog.FileName;
-                SaveJsonDataFromFile(filePath);
+                await SaveJsonDataFromFileAsync(filePath);
                 MessageBox.Show("Дані успішно імпортовано з JSON.");
             }
         }
@@ -143,16 +150,16 @@ namespace PeopleManagement
         }
 
         //Save json data to db
-        private void SaveJsonDataFromFile(string filePath)
+        private async Task SaveJsonDataFromFileAsync(string filePath)
         {
             var employees = JsonDataService.ImportFromJson(filePath);
 
             foreach (var employee in employees)
             {
-                db.Employees.Add(employee);
+                await db.Employees.AddAsync(employee);
             }
 
-            db.SaveChanges();
+            await db.SaveChangesAsync();
             UpdateEmployeeListView();
         }
     }
